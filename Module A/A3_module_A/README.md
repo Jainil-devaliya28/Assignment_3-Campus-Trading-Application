@@ -79,7 +79,7 @@ The system guarantees:
 ```bash
 pip install -r requirements.txt
 python app.py
-python run_tests.py
+# run_tests
 ```
 
 ---
