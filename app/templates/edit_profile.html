@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Edit Profile — CampusTrade{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>Edit Profile</h2>
+  <a href="{{ url_for('main.profile', member_id=session.member_id) }}" class="btn btn-outline">← Back</a>
+</div>
+
+<div class="form-card">
+  <form method="POST" action="{{ url_for('main.edit_profile') }}" novalidate>
+    <h3 class="section-label">Personal Info</h3>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" name="name" value="{{ member.name }}" required />
+      </div>
+      <div class="form-group">
+        <label>Phone</label>
+        <input type="tel" name="phone" value="{{ member.phone or '' }}" />
+      </div>
+    </div>
+
+    {% if member.student %}
+    <h3 class="section-label">Academic Info</h3>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Hostel Name & Room Number</label>
+        <input type="text" name="college_name" value="{{ member.student.college_name or '' }}" />
+      </div>
+      <div class="form-group">
+        <label>Department</label>
+        <input type="text" name="department" value="{{ member.student.department or '' }}" />
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Year</label>
+        <input type="number" name="year" value="{{ member.student.year or '' }}" min="1" max="6" />
+      </div>
+      <div class="form-group">
+        <label>Roll Number</label>
+        <input type="text" name="roll_number" value="{{ member.student.roll_number or '' }}" />
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+      <a href="{{ url_for('main.profile', member_id=session.member_id) }}" class="btn btn-outline">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

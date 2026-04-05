@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}Messages — CampusTrade{% endblock %}
+
+{% block content %}
+<div class="chat-layout">
+  <!-- Sidebar: conversation list -->
+  <div class="chat-sidebar">
+    <div class="chat-sidebar-header">
+      <h3>Messages</h3>
+    </div>
+    {% if partners %}
+      {% for p in partners %}
+      <a href="{{ url_for('chat.conversation', partner_id=p.member_id) }}"
+         class="chat-contact {% if active_partner and active_partner.member_id == p.member_id %}active{% endif %}">
+        <div class="contact-avatar">{{ p.name[0].upper() }}</div>
+        <div class="contact-info">
+          <span class="contact-name">{{ p.name }}</span>
+          {% if unread.get(p.member_id, 0) > 0 %}
+          <span class="unread-badge">{{ unread[p.member_id] }}</span>
+          {% endif %}
+        </div>
+      </a>
+      {% endfor %}
+    {% else %}
+      <p class="empty-text p-1">No conversations yet.<br/>
+        Visit a product and message the seller to start.</p>
+    {% endif %}
+  </div>
+
+  <!-- Main: message area -->
+  <div class="chat-main">
+    {% if active_partner %}
+    <div class="chat-header">
+      <div class="contact-avatar">{{ active_partner.name[0].upper() }}</div>
+      <div>
+        <strong>{{ active_partner.name }}</strong>
+        <a href="{{ url_for('main.profile', member_id=active_partner.member_id) }}"
+           class="link-subtle"> &nbsp;View profile</a>
+      </div>
+    </div>
+
+    <div class="chat-messages" id="msgBox">
+      {% if messages %}
+        {% for msg in messages %}
+        <div class="message-bubble {% if msg.sender_id == me %}mine{% else %}theirs{% endif %}"
+             data-id="{{ msg.chat_id }}">
+          <p>{{ msg.message }}</p>
+          <small>{{ msg.created_at.strftime('%d %b %H:%M') }}</small>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p class="empty-text center" id="emptyHint">Say hello! 👋</p>
+      {% endif %}
+    </div>
+
+    <form method="POST"
+          action="{{ url_for('chat.conversation', partner_id=active_partner.member_id) }}"
+          class="chat-form" id="chatForm">
+      <input type="text" name="message" id="msgInput"
+             placeholder="Type a message…" autocomplete="off" required />
+      <button type="submit" class="btn btn-primary">Send</button>
+    </form>
+
+    {% else %}
+    <div class="chat-empty">
+      <p>👈 Select a conversation or</p>
+      <a href="{{ url_for('products.marketplace') }}" class="btn btn-primary">Browse marketplace</a>
+      <p class="empty-text">and message a seller to get started</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% if active_partner %}
+<script>
+  // Scroll to bottom on load
+  const msgBox = document.getElementById('msgBox');
+  if (msgBox) msgBox.scrollTop = msgBox.scrollHeight;
+
+  // Auto-poll for new messages every 5 seconds
+  let lastId = {% if messages %}{{ messages[-1].chat_id }}{% else %}0{% endif %};
+  const partnerId = {{ active_partner.member_id }};
+
+  setInterval(async () => {
+    try {
+      const res  = await fetch('/chat/' + partnerId + '/poll?after=' + lastId);
+      if (!res.ok) return;
+      const data = await res.json();
+      if (!data.messages || data.messages.length === 0) return;
+
+      const hint = document.getElementById('emptyHint');
+      if (hint) hint.remove();
+
+      data.messages.forEach(function(m) {
+        const div = document.createElement('div');
+        div.className = 'message-bubble ' + (m.mine ? 'mine' : 'theirs');
+        div.dataset.id = m.id;
+        div.innerHTML = '<p>' + escHtml(m.text) + '</p><small>' + m.time + '</small>';
+        msgBox.appendChild(div);
+        lastId = m.id;
+      });
+      msgBox.scrollTop = msgBox.scrollHeight;
+    } catch(e) { /* network error — silent */ }
+  }, 5000);
+
+  function escHtml(s) {
+    var d = document.createElement('div');
+    d.appendChild(document.createTextNode(s));
+    return d.innerHTML;
+  }
+
+  document.getElementById('msgInput') && document.getElementById('msgInput').focus();
+</script>
+{% endif %}
+{% endblock %}

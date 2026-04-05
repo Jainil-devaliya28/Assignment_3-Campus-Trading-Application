@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}My Listings — CampusTrade{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>My Listings</h2>
+  <a href="{{ url_for('products.add_product') }}" class="btn btn-primary">+ Add Product</a>
+</div>
+
+<!-- Summary -->
+<div class="stats-grid" style="margin-bottom:1.5rem;">
+  <div class="stat-card">
+    <span class="stat-number">{{ products|length }}</span>
+    <span class="stat-label">Total Listed</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-number">{{ products|selectattr('is_available')|list|length }}</span>
+    <span class="stat-label">Available</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-number">{{ products|rejectattr('is_available')|list|length }}</span>
+    <span class="stat-label">Sold</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-number">₹{{ "%.0f"|format(total_earned) }}</span>
+    <span class="stat-label">Value Sold</span>
+  </div>
+</div>
+
+<!-- Filter -->
+<form method="GET" class="filter-bar">
+  <select name="status" class="filter-select">
+    <option value="">All Products</option>
+    <option value="available" {% if status_filter == 'available' %}selected{% endif %}>Available Only</option>
+    <option value="sold"      {% if status_filter == 'sold'      %}selected{% endif %}>Sold Only</option>
+  </select>
+  <button type="submit" class="btn btn-primary">Filter</button>
+  <a href="{{ url_for('products.my_listings') }}" class="btn btn-outline">Clear</a>
+</form>
+
+{% if products %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Category</th>
+      <th>Price</th>
+      <th>Condition</th>
+      <th>Status</th>
+      <th>Listed</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in products %}
+    <tr>
+      <td>
+        <a href="{{ url_for('products.product_detail', product_id=p.product_id) }}">
+          {{ p.title }}
+        </a>
+      </td>
+      <td>{{ p.category or '—' }}</td>
+      <td><strong>₹{{ "%.2f"|format(p.price) }}</strong></td>
+      <td>
+        {% if p.condition %}
+        <span class="condition-badge condition-{{ p.condition|lower }}">{{ p.condition }}</span>
+        {% else %}—{% endif %}
+      </td>
+      <td>
+        {% if p.is_available %}
+        <span class="badge badge-green">Available</span>
+        {% else %}
+        <span class="badge badge-red">Sold</span>
+        {% endif %}
+      </td>
+      <td>{{ p.created_at.strftime('%d %b %Y') }}</td>
+      <td>
+        <div class="action-row">
+          <a href="{{ url_for('products.edit_product', product_id=p.product_id) }}"
+             class="btn btn-sm btn-secondary">Edit</a>
+
+          <form method="POST"
+                action="{{ url_for('products.toggle_availability', product_id=p.product_id) }}"
+                style="display:inline;">
+            <button type="submit" class="btn btn-sm btn-outline"
+                    title="{{ 'Mark as Sold' if p.is_available else 'Relist' }}">
+              {{ '📦 Sold' if p.is_available else '🔄 Relist' }}
+            </button>
+          </form>
+
+          <form method="POST"
+                action="{{ url_for('products.delete_product', product_id=p.product_id) }}"
+                style="display:inline;"
+                onsubmit="return confirm('Delete {{ p.title }}? This cannot be undone.')">
+            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+          </form>
+        </div>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="empty-state">
+  <p>You haven't listed any products yet.</p>
+  <a href="{{ url_for('products.add_product') }}" class="btn btn-primary">List your first item</a>
+</div>
+{% endif %}
+{% endblock %}

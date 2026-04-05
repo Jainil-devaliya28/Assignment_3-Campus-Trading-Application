@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}My Transactions — CampusTrade{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>Transaction History</h2>
+  <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline">← Dashboard</a>
+</div>
+
+<!-- Summary cards -->
+<div class="stats-grid" style="margin-bottom:1.5rem;">
+  <div class="stat-card">
+    <span class="stat-number">₹{{ "%.0f"|format(total_spent) }}</span>
+    <span class="stat-label">Total Spent</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-number">₹{{ "%.0f"|format(total_earned) }}</span>
+    <span class="stat-label">Total Earned</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-number">{{ txns|length }}</span>
+    <span class="stat-label">Total Transactions</span>
+  </div>
+</div>
+
+<!-- Role filter -->
+<form method="GET" class="filter-bar">
+  <select name="role" class="filter-select">
+    <option value="">All Transactions</option>
+    <option value="buyer"  {% if role_filter == 'buyer'  %}selected{% endif %}>As Buyer</option>
+    <option value="seller" {% if role_filter == 'seller' %}selected{% endif %}>As Seller</option>
+  </select>
+  <button type="submit" class="btn btn-primary">Filter</button>
+  <a href="{{ url_for('transactions.my_transactions') }}" class="btn btn-outline">Clear</a>
+</form>
+
+{% if txns %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Product</th>
+      <th>Role</th>
+      <th>With</th>
+      <th>Amount</th>
+      <th>Status</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for t in txns %}
+    <tr>
+      <td>{{ t.txn_id }}</td>
+      <td>
+        {% if t.product %}
+        <a href="{{ url_for('products.product_detail', product_id=t.product.product_id) }}">{{ t.product.title }}</a>
+        {% else %}
+        <span class="empty-text">(product deleted)</span>
+        {% endif %}
+      </td>
+      <td>
+        {% if t.buyer_id == session.member_id %}
+        <span class="badge badge-blue">Buyer</span>
+        {% else %}
+        <span class="badge badge-green">Seller</span>
+        {% endif %}
+      </td>
+      <td>
+        {% if t.buyer_id == session.member_id %}
+        <a href="{{ url_for('main.profile', member_id=t.seller_id) }}">{{ t.seller_txn.name }}</a>
+        {% else %}
+        <a href="{{ url_for('main.profile', member_id=t.buyer_id) }}">{{ t.buyer.name }}</a>
+        {% endif %}
+      </td>
+      <td><strong>₹{{ "%.2f"|format(t.amount) }}</strong></td>
+      <td>
+        <span class="badge badge-{{ 'green' if t.status == 'completed' else ('red' if t.status == 'cancelled' else 'yellow') }}">
+          {{ t.status }}
+        </span>
+      </td>
+      <td>{{ t.created_at.strftime('%d %b %Y, %H:%M') }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<div class="empty-state">
+  <p>No transactions found.</p>
+  <a href="{{ url_for('products.marketplace') }}" class="btn btn-primary">Browse Marketplace</a>
+</div>
+{% endif %}
+{% endblock %}

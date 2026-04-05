@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+{% block title %}{{ member.name }} — Portfolio{% endblock %}
+
+{% block content %}
+<div class="profile-layout">
+
+  <div class="profile-sidebar">
+    <div class="profile-card">
+      <div class="avatar-circle">{{ member.name[0].upper() }}</div>
+      <h3>{{ member.name }}</h3>
+      <span class="role-badge role-{{ member.role }}">{{ member.role|upper }}</span>
+
+      {% if can_see_full %}
+      <p class="profile-email">{{ member.email }}</p>
+      {% if member.phone %}<p class="profile-phone">📞 {{ member.phone }}</p>{% endif %}
+      {% endif %}
+      <p class="profile-since">Member since {{ member.created_at.strftime('%b %Y') }}</p>
+
+      {% if member.student %}
+      <div class="student-info">
+        {% if member.student.college_name %}<p>🏫 {{ member.student.college_name }}</p>{% endif %}
+        {% if member.student.department   %}<p>📚 {{ member.student.department }}</p>{% endif %}
+        {% if member.student.year         %}<p>📅 Year {{ member.student.year }}</p>{% endif %}
+        {% if member.student.roll_number and can_see_full %}<p>🎫 {{ member.student.roll_number }}</p>{% endif %}
+      </div>
+      {% endif %}
+
+      {% if avg_rating %}
+      <div class="rating-summary">★ {{ "%.1f"|format(avg_rating) }} avg rating</div>
+      {% endif %}
+
+      <div class="portfolio-stats">
+        <div class="ps-item"><span class="ps-num">{{ total_listed }}</span><span class="ps-lbl">Listed</span></div>
+        <div class="ps-item"><span class="ps-num">{{ total_sold }}</span><span class="ps-lbl">Sold</span></div>
+        <div class="ps-item"><span class="ps-num">{{ reviews|length }}</span><span class="ps-lbl">Reviews</span></div>
+      </div>
+
+      {% if is_owner %}
+      <a href="{{ url_for('main.edit_profile') }}"    class="btn btn-outline btn-full mt-1">Edit Profile</a>
+      <a href="{{ url_for('auth.change_password') }}" class="btn btn-outline btn-full mt-1">Change Password</a>
+      <a href="{{ url_for('chat.inbox') }}"           class="btn btn-outline btn-full mt-1">Messages</a>
+      {% else %}
+      <a href="{{ url_for('chat.start_chat', member_id=member.member_id) }}" class="btn btn-primary btn-full mt-1">💬 Message</a>
+      {% endif %}
+
+      {% if not can_see_full %}
+      <p class="access-note">🔒 Some details are private</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="profile-main">
+
+    <div class="section">
+      <div class="section-header">
+        <h3>Listed Products ({{ products|length }})</h3>
+        {% if is_owner %}<a href="{{ url_for('products.add_product') }}" class="btn btn-sm btn-primary">+ Add</a>{% endif %}
+      </div>
+      {% if products %}
+      <div class="product-grid">
+        {% for p in products %}
+        <div class="product-card">
+          {% if p.image_url %}<img src="{{ p.image_url }}" alt="{{ p.title }}" class="product-img" />
+          {% else %}<div class="product-img-placeholder">📦</div>{% endif %}
+          <div class="product-info">
+            <span class="product-category">{{ p.category or 'Other' }}</span>
+            <h4><a href="{{ url_for('products.product_detail', product_id=p.product_id) }}">{{ p.title }}</a></h4>
+            <div class="product-footer">
+              <strong class="price">₹{{ "%.2f"|format(p.price) }}</strong>
+              {% if is_owner %}<a href="{{ url_for('products.edit_product', product_id=p.product_id) }}" class="link-subtle">Edit</a>{% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="empty-text">No active listings.</p>
+      {% endif %}
+    </div>
+
+    {% if reviews %}
+    <div class="section">
+      <h3>Reviews Received {% if avg_rating %}<span class="avg-rating">★ {{ "%.1f"|format(avg_rating) }}</span>{% endif %}</h3>
+      {% for r in reviews %}
+      <div class="review-card">
+        <div class="review-header">
+          <span class="stars">{{ '★' * r.rating }}{{ '☆' * (5 - r.rating) }}</span>
+          <a href="{{ url_for('main.profile', member_id=r.reviewer_id) }}">{{ r.reviewer.name }}</a>
+          <small>· {{ r.created_at.strftime('%d %b %Y') }}</small>
+        </div>
+        {% if r.comment %}<p>{{ r.comment }}</p>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if can_see_full %}
+    <div class="section">
+      <div class="section-header">
+        <h3>Transaction History</h3>
+        {% if is_owner %}<a href="{{ url_for('transactions.my_transactions') }}" class="link-subtle">View all →</a>{% endif %}
+      </div>
+      {% if txns %}
+      <table class="table">
+        <thead><tr><th>Product</th><th>Role</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+        <tbody>
+        {% for t in txns %}
+        <tr>
+          <td>{{ t.product.title if t.product else '(deleted)' }}</td>
+          <td>{% if t.buyer_id == member.member_id %}<span class="badge badge-blue">Buyer</span>{% else %}<span class="badge badge-green">Seller</span>{% endif %}</td>
+          <td>₹{{ "%.2f"|format(t.amount) }}</td>
+          <td><span class="badge badge-{{ 'green' if t.status == 'completed' else 'yellow' }}">{{ t.status }}</span></td>
+          <td>{{ t.created_at.strftime('%d %b %Y') }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="empty-text">No transactions yet.</p>
+      {% endif %}
+    </div>
+
+    {% if demands %}
+    <div class="section">
+      <h3>Open Demands</h3>
+      {% for d in demands %}
+      <div class="demand-card">
+        <div class="demand-header">
+          <div><span class="product-category">{{ d.category or 'Other' }}</span><h4>{{ d.title }}</h4></div>
+          {% if d.budget %}<strong class="price">Budget: ₹{{ "%.2f"|format(d.budget) }}</strong>{% endif %}
+        </div>
+        {% if d.description %}<p class="demand-desc">{{ d.description }}</p>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div class="section">
+      <div class="access-restricted-box">
+        <span>🔒</span>
+        <p>Transaction history and personal details are only visible to the account owner.</p>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}

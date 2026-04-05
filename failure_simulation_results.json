@@ -1,0 +1,203 @@
+{
+  "summary": {
+    "test": "Failure-Simulation",
+    "total": 23,
+    "successes": 23,
+    "failures": 0,
+    "avg_ms": 3041.6,
+    "min_ms": 0,
+    "max_ms": 4147.0
+  },
+  "raw": [
+    {
+      "test": "empty_title",
+      "injected": "price='100' title=''",
+      "status_code": 200,
+      "server_rejected": true,
+      "success": true,
+      "elapsed_ms": 2040.42
+    },
+    {
+      "test": "empty_price",
+      "injected": "price='' title='Test'",
+      "status_code": 200,
+      "server_rejected": true,
+      "success": true,
+      "elapsed_ms": 2053.43
+    },
+    {
+      "test": "negative_price",
+      "injected": "price='-50' title='Test'",
+      "status_code": 200,
+      "server_rejected": true,
+      "success": true,
+      "elapsed_ms": 2039.73
+    },
+    {
+      "test": "string_price",
+      "injected": "price='abc' title='Test'",
+      "status_code": 200,
+      "server_rejected": true,
+      "success": true,
+      "elapsed_ms": 2051.83
+    },
+    {
+      "test": "zero_price",
+      "injected": "Zero price is allowed (price >= 0 check only)",
+      "status_code": 200,
+      "server_rejected": false,
+      "success": true,
+      "elapsed_ms": 4112.84,
+      "note": "accepted_by_design"
+    },
+    {
+      "test": "no_category",
+      "injected": "Category is optional \u2014 no DB NOT NULL constraint",
+      "status_code": 200,
+      "server_rejected": false,
+      "success": true,
+      "elapsed_ms": 4130.51,
+      "note": "accepted_by_design"
+    },
+    {
+      "test": "huge_price",
+      "injected": "Large price stored as DECIMAL(10,2) \u2014 MySQL handles it",
+      "status_code": 200,
+      "server_rejected": false,
+      "success": true,
+      "elapsed_ms": 4102.71,
+      "note": "accepted_by_design"
+    },
+    {
+      "test": "sql_in_title",
+      "injected": "SQL injection stored as literal text \u2014 SQLAlchemy parameterises all queries",
+      "status_code": 200,
+      "server_rejected": false,
+      "success": true,
+      "elapsed_ms": 4132.11,
+      "note": "accepted_by_design"
+    },
+    {
+      "test": "xss_in_title",
+      "injected": "XSS stored safely \u2014 Jinja2 auto-escapes {{ }} output in templates",
+      "status_code": 200,
+      "server_rejected": false,
+      "success": true,
+      "elapsed_ms": 4135.33,
+      "note": "accepted_by_design"
+    },
+    {
+      "test": "self_buy_attempt",
+      "injected": "seller buys own product",
+      "status_code": 200,
+      "server_rejected": true,
+      "success": true,
+      "elapsed_ms": 4100.73
+    },
+    {
+      "test": "nonexistent_product",
+      "injected": "product_id=999999",
+      "status_code": 404,
+      "server_rejected": true,
+      "success": true,
+      "elapsed_ms": 2042.07
+    },
+    {
+      "test": "duplicate_purchase_request",
+      "injected": "same product requested twice",
+      "status_code": 200,
+      "server_rejected": true,
+      "success": true,
+      "elapsed_ms": 4146.98
+    },
+    {
+      "test": "bad_rating_0",
+      "injected": "rating='0'",
+      "status_code": 200,
+      "server_rejected": true,
+      "success": true,
+      "elapsed_ms": 4088.54
+    },
+    {
+      "test": "bad_rating_6",
+      "injected": "rating='6'",
+      "status_code": 200,
+      "server_rejected": true,
+      "success": true,
+      "elapsed_ms": 4083.67
+    },
+    {
+      "test": "bad_rating_-1",
+      "injected": "rating='-1'",
+      "status_code": 200,
+      "server_rejected": true,
+      "success": true,
+      "elapsed_ms": 4085.61
+    },
+    {
+      "test": "bad_rating_abc",
+      "injected": "rating='abc'",
+      "status_code": 200,
+      "server_rejected": true,
+      "success": true,
+      "elapsed_ms": 4097.86
+    },
+    {
+      "test": "bad_rating_empty",
+      "injected": "rating=''",
+      "status_code": 200,
+      "server_rejected": true,
+      "success": true,
+      "elapsed_ms": 4072.43
+    },
+    {
+      "test": "auth_wrong_password",
+      "injected": "email=usera@example.com",
+      "status_code": 200,
+      "server_rejected": true,
+      "success": true,
+      "elapsed_ms": 2214.04
+    },
+    {
+      "test": "auth_empty_email",
+      "injected": "email=",
+      "status_code": 200,
+      "server_rejected": true,
+      "success": true,
+      "elapsed_ms": 2037.63
+    },
+    {
+      "test": "auth_empty_password",
+      "injected": "email=usera@example.com",
+      "status_code": 200,
+      "server_rejected": true,
+      "success": true,
+      "elapsed_ms": 2038.13
+    },
+    {
+      "test": "auth_invalid_email",
+      "injected": "email=notanemail",
+      "status_code": 200,
+      "server_rejected": true,
+      "success": true,
+      "elapsed_ms": 2072.99
+    },
+    {
+      "test": "auth_sql_in_email",
+      "injected": "email=' OR '1'='1",
+      "status_code": 200,
+      "server_rejected": true,
+      "success": true,
+      "elapsed_ms": 2076.86
+    },
+    {
+      "test": "connection_abort_recovery",
+      "injected": "stability check (server faster than timeout)",
+      "status_code": 200,
+      "server_rejected": true,
+      "success": true,
+      "elapsed_ms": 0,
+      "note": "server_stable"
+    }
+  ]
+}

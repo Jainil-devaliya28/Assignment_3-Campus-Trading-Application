@@ -1,0 +1,458 @@
+{
+  "summary": {
+    "concurrent_reads": {
+      "test": "Concurrent Reads",
+      "total": 45,
+      "successes": 45,
+      "failures": 0,
+      "avg_ms": 2055.9,
+      "min_ms": 2024.0,
+      "max_ms": 2153.2,
+      "wall_time_sec": 17.32
+    },
+    "concurrent_writes": {
+      "test": "Concurrent Writes",
+      "total": 6,
+      "successes": 6,
+      "failures": 0,
+      "avg_ms": 4090.4,
+      "min_ms": 4053.8,
+      "max_ms": 4130.1
+    }
+  },
+  "raw": {
+    "concurrent_reads": [
+      {
+        "user": "usera@example.com",
+        "action": "browse_marketplace",
+        "iteration": 1,
+        "status_code": 200,
+        "elapsed_ms": 2042.67,
+        "success": true
+      },
+      {
+        "user": "usera@example.com",
+        "action": "view_transactions",
+        "iteration": 1,
+        "status_code": 200,
+        "elapsed_ms": 2036.05,
+        "success": true
+      },
+      {
+        "user": "userb@example.com",
+        "action": "browse_marketplace",
+        "iteration": 1,
+        "status_code": 200,
+        "elapsed_ms": 2042.92,
+        "success": true
+      },
+      {
+        "user": "usera@example.com",
+        "action": "product_detail",
+        "product_id": 194,
+        "iteration": 1,
+        "status_code": 200,
+        "elapsed_ms": 2077.82,
+        "success": true
+      },
+      {
+        "user": "userc@example.com",
+        "action": "product_detail",
+        "product_id": 194,
+        "iteration": 1,
+        "status_code": 200,
+        "elapsed_ms": 2072.67,
+        "success": true
+      },
+      {
+        "user": "userc@example.com",
+        "action": "view_transactions",
+        "iteration": 1,
+        "status_code": 200,
+        "elapsed_ms": 2110.94,
+        "success": true
+      },
+      {
+        "user": "userb@example.com",
+        "action": "view_transactions",
+        "iteration": 1,
+        "status_code": 200,
+        "elapsed_ms": 2153.21,
+        "success": true
+      },
+      {
+        "user": "userb@example.com",
+        "action": "product_detail",
+        "product_id": 194,
+        "iteration": 1,
+        "status_code": 200,
+        "elapsed_ms": 2113.51,
+        "success": true
+      },
+      {
+        "user": "userc@example.com",
+        "action": "browse_marketplace",
+        "iteration": 1,
+        "status_code": 200,
+        "elapsed_ms": 2098.6,
+        "success": true
+      },
+      {
+        "user": "usera@example.com",
+        "action": "view_transactions",
+        "iteration": 2,
+        "status_code": 200,
+        "elapsed_ms": 2051.46,
+        "success": true
+      },
+      {
+        "user": "usera@example.com",
+        "action": "browse_marketplace",
+        "iteration": 2,
+        "status_code": 200,
+        "elapsed_ms": 2077.06,
+        "success": true
+      },
+      {
+        "user": "userb@example.com",
+        "action": "browse_marketplace",
+        "iteration": 2,
+        "status_code": 200,
+        "elapsed_ms": 2061.28,
+        "success": true
+      },
+      {
+        "user": "userc@example.com",
+        "action": "product_detail",
+        "product_id": 194,
+        "iteration": 2,
+        "status_code": 200,
+        "elapsed_ms": 2059.73,
+        "success": true
+      },
+      {
+        "user": "usera@example.com",
+        "action": "product_detail",
+        "product_id": 194,
+        "iteration": 2,
+        "status_code": 200,
+        "elapsed_ms": 2063.08,
+        "success": true
+      },
+      {
+        "user": "userb@example.com",
+        "action": "product_detail",
+        "product_id": 194,
+        "iteration": 2,
+        "status_code": 200,
+        "elapsed_ms": 2047.59,
+        "success": true
+      },
+      {
+        "user": "userc@example.com",
+        "action": "view_transactions",
+        "iteration": 2,
+        "status_code": 200,
+        "elapsed_ms": 2046.83,
+        "success": true
+      },
+      {
+        "user": "userb@example.com",
+        "action": "view_transactions",
+        "iteration": 2,
+        "status_code": 200,
+        "elapsed_ms": 2030.64,
+        "success": true
+      },
+      {
+        "user": "userc@example.com",
+        "action": "browse_marketplace",
+        "iteration": 2,
+        "status_code": 200,
+        "elapsed_ms": 2058.8,
+        "success": true
+      },
+      {
+        "user": "userc@example.com",
+        "action": "product_detail",
+        "product_id": 194,
+        "iteration": 3,
+        "status_code": 200,
+        "elapsed_ms": 2023.99,
+        "success": true
+      },
+      {
+        "user": "usera@example.com",
+        "action": "product_detail",
+        "product_id": 194,
+        "iteration": 3,
+        "status_code": 200,
+        "elapsed_ms": 2052.85,
+        "success": true
+      },
+      {
+        "user": "usera@example.com",
+        "action": "view_transactions",
+        "iteration": 3,
+        "status_code": 200,
+        "elapsed_ms": 2038.36,
+        "success": true
+      },
+      {
+        "user": "usera@example.com",
+        "action": "browse_marketplace",
+        "iteration": 3,
+        "status_code": 200,
+        "elapsed_ms": 2037.61,
+        "success": true
+      },
+      {
+        "user": "userb@example.com",
+        "action": "browse_marketplace",
+        "iteration": 3,
+        "status_code": 200,
+        "elapsed_ms": 2053.64,
+        "success": true
+      },
+      {
+        "user": "userb@example.com",
+        "action": "product_detail",
+        "product_id": 194,
+        "iteration": 3,
+        "status_code": 200,
+        "elapsed_ms": 2029.59,
+        "success": true
+      },
+      {
+        "user": "userc@example.com",
+        "action": "view_transactions",
+        "iteration": 3,
+        "status_code": 200,
+        "elapsed_ms": 2030.88,
+        "success": true
+      },
+      {
+        "user": "userb@example.com",
+        "action": "view_transactions",
+        "iteration": 3,
+        "status_code": 200,
+        "elapsed_ms": 2029.29,
+        "success": true
+      },
+      {
+        "user": "userc@example.com",
+        "action": "browse_marketplace",
+        "iteration": 3,
+        "status_code": 200,
+        "elapsed_ms": 2058.15,
+        "success": true
+      },
+      {
+        "user": "userc@example.com",
+        "action": "product_detail",
+        "product_id": 194,
+        "iteration": 4,
+        "status_code": 200,
+        "elapsed_ms": 2055.35,
+        "success": true
+      },
+      {
+        "user": "usera@example.com",
+        "action": "product_detail",
+        "product_id": 194,
+        "iteration": 4,
+        "status_code": 200,
+        "elapsed_ms": 2048.95,
+        "success": true
+      },
+      {
+        "user": "usera@example.com",
+        "action": "view_transactions",
+        "iteration": 4,
+        "status_code": 200,
+        "elapsed_ms": 2033.07,
+        "success": true
+      },
+      {
+        "user": "usera@example.com",
+        "action": "browse_marketplace",
+        "iteration": 4,
+        "status_code": 200,
+        "elapsed_ms": 2043.82,
+        "success": true
+      },
+      {
+        "user": "userb@example.com",
+        "action": "product_detail",
+        "product_id": 194,
+        "iteration": 4,
+        "status_code": 200,
+        "elapsed_ms": 2052.34,
+        "success": true
+      },
+      {
+        "user": "userb@example.com",
+        "action": "browse_marketplace",
+        "iteration": 4,
+        "status_code": 200,
+        "elapsed_ms": 2046.11,
+        "success": true
+      },
+      {
+        "user": "userc@example.com",
+        "action": "view_transactions",
+        "iteration": 4,
+        "status_code": 200,
+        "elapsed_ms": 2025.39,
+        "success": true
+      },
+      {
+        "user": "userb@example.com",
+        "action": "view_transactions",
+        "iteration": 4,
+        "status_code": 200,
+        "elapsed_ms": 2071.36,
+        "success": true
+      },
+      {
+        "user": "userc@example.com",
+        "action": "browse_marketplace",
+        "iteration": 4,
+        "status_code": 200,
+        "elapsed_ms": 2073.71,
+        "success": true
+      },
+      {
+        "user": "userc@example.com",
+        "action": "product_detail",
+        "product_id": 194,
+        "iteration": 5,
+        "status_code": 200,
+        "elapsed_ms": 2042.87,
+        "success": true
+      },
+      {
+        "user": "usera@example.com",
+        "action": "product_detail",
+        "product_id": 194,
+        "iteration": 5,
+        "status_code": 200,
+        "elapsed_ms": 2040.16,
+        "success": true
+      },
+      {
+        "user": "usera@example.com",
+        "action": "view_transactions",
+        "iteration": 5,
+        "status_code": 200,
+        "elapsed_ms": 2042.85,
+        "success": true
+      },
+      {
+        "user": "userb@example.com",
+        "action": "product_detail",
+        "product_id": 194,
+        "iteration": 5,
+        "status_code": 200,
+        "elapsed_ms": 2064.48,
+        "success": true
+      },
+      {
+        "user": "userb@example.com",
+        "action": "browse_marketplace",
+        "iteration": 5,
+        "status_code": 200,
+        "elapsed_ms": 2028.25,
+        "success": true
+      },
+      {
+        "user": "usera@example.com",
+        "action": "browse_marketplace",
+        "iteration": 5,
+        "status_code": 200,
+        "elapsed_ms": 2067.74,
+        "success": true
+      },
+      {
+        "user": "userc@example.com",
+        "action": "view_transactions",
+        "iteration": 5,
+        "status_code": 200,
+        "elapsed_ms": 2061.86,
+        "success": true
+      },
+      {
+        "user": "userb@example.com",
+        "action": "view_transactions",
+        "iteration": 5,
+        "status_code": 200,
+        "elapsed_ms": 2065.95,
+        "success": true
+      },
+      {
+        "user": "userc@example.com",
+        "action": "browse_marketplace",
+        "iteration": 5,
+        "status_code": 200,
+        "elapsed_ms": 2053.94,
+        "success": true
+      }
+    ],
+    "concurrent_writes": [
+      {
+        "user": "userc@example.com",
+        "action": "add_product",
+        "title": "ConcTest-T2-User C",
+        "status_code": 200,
+        "elapsed_ms": 4053.77,
+        "success": true,
+        "detail": "success"
+      },
+      {
+        "user": "userc@example.com",
+        "action": "add_product",
+        "title": "ConcTest-T5-User C",
+        "status_code": 200,
+        "elapsed_ms": 4099.78,
+        "success": true,
+        "detail": "success"
+      },
+      {
+        "user": "usera@example.com",
+        "action": "add_product",
+        "title": "ConcTest-T3-User A",
+        "status_code": 200,
+        "elapsed_ms": 4079.17,
+        "success": true,
+        "detail": "success"
+      },
+      {
+        "user": "usera@example.com",
+        "action": "add_product",
+        "title": "ConcTest-T0-User A",
+        "status_code": 200,
+        "elapsed_ms": 4092.45,
+        "success": true,
+        "detail": "success"
+      },
+      {
+        "user": "userb@example.com",
+        "action": "add_product",
+        "title": "ConcTest-T1-User B",
+        "status_code": 200,
+        "elapsed_ms": 4087.17,
+        "success": true,
+        "detail": "success"
+      },
+      {
+        "user": "userb@example.com",
+        "action": "add_product",
+        "title": "ConcTest-T4-User B",
+        "status_code": 200,
+        "elapsed_ms": 4130.1,
+        "success": true,
+        "detail": "success"
+      }
+    ]
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "ATOMICITY": {
+    "passed": true,
+    "score": "3/3",
+    "checks": [
+      {
+        "name": "A1 \u2013 Failed add creates no record",
+        "passed": true,
+        "detail": "before=156 after=156 title_found=False"
+      },
+      {
+        "name": "A2 \u2013 Committed add is immediately visible",
+        "passed": true,
+        "detail": "'ATOM-OK-1775381383' in marketplace: True"
+      },
+      {
+        "name": "A3 \u2013 Approval atomically delists + creates txn",
+        "passed": true,
+        "detail": "sold_marker=True txn_visible=True"
+      }
+    ]
+  },
+  "CONSISTENCY": {
+    "passed": true,
+    "score": "4/4",
+    "checks": [
+      {
+        "name": "C1 \u2013 Duplicate email rejected",
+        "passed": true,
+        "detail": "status=200"
+      },
+      {
+        "name": "C2 \u2013 Self-buy blocked",
+        "passed": true,
+        "detail": "status=200"
+      },
+      {
+        "name": "C3 \u2013 Negative price rejected",
+        "passed": true,
+        "detail": "status=200"
+      },
+      {
+        "name": "C4 \u2013 Out-of-range rating rejected",
+        "passed": true,
+        "detail": "status=200, rejection_detected=True"
+      }
+    ]
+  },
+  "ISOLATION": {
+    "passed": true,
+    "score": "3/3",
+    "checks": [
+      {
+        "name": "I1 \u2013 Concurrent reads consistent",
+        "passed": true,
+        "detail": "A={'status': 200, 'count': 204} B={'status': 200, 'count': 204}"
+      },
+      {
+        "name": "I2 \u2013 Session isolation",
+        "passed": true,
+        "detail": "both_authenticated=True A_email_in_B_page=False"
+      },
+      {
+        "name": "I3 \u2013 Concurrent adds don't corrupt listings",
+        "passed": true,
+        "detail": "{'UserB': {'status': 200, 'visible': True}, 'UserA': {'status': 200, 'visible': True}}"
+      }
+    ]
+  },
+  "DURABILITY": {
+    "passed": true,
+    "score": "3/3",
+    "checks": [
+      {
+        "name": "D1 \u2013 Write visible from fresh session immediately",
+        "passed": true,
+        "detail": "title='DUR-TEST-1775381471' found_in_marketplace=True"
+      },
+      {
+        "name": "D2 \u2013 Data persists after logout/login cycle",
+        "passed": true,
+        "detail": "title found in my-listings: True"
+      },
+      {
+        "name": "D3 \u2013 Transaction history accessible and persistent",
+        "passed": true,
+        "detail": "txn_page_status=200 has_data=True"
+      }
+    ]
+  }
+}

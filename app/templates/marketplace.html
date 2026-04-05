@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Marketplace — CampusTrade{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>Marketplace</h2>
+  <a href="{{ url_for('products.add_product') }}" class="btn btn-primary">+ List Item</a>
+</div>
+
+<!-- Filters -->
+<form method="GET" action="{{ url_for('products.marketplace') }}" class="filter-bar">
+  <input type="text" name="search" placeholder="Search products…" value="{{ search }}" class="filter-input" />
+  <select name="category" class="filter-select">
+    <option value="">All Categories</option>
+    {% for c in categories %}
+    <option value="{{ c }}" {% if selected_category == c %}selected{% endif %}>{{ c }}</option>
+    {% endfor %}
+  </select>
+  <input type="number" name="min_price" placeholder="Min ₹" value="{{ min_price }}" class="filter-input filter-price" min="0" />
+  <input type="number" name="max_price" placeholder="Max ₹" value="{{ max_price }}" class="filter-input filter-price" min="0" />
+  <button type="submit" class="btn btn-primary">Filter</button>
+  <a href="{{ url_for('products.marketplace') }}" class="btn btn-outline">Clear</a>
+</form>
+
+{% if products %}
+<div class="product-grid product-grid-large">
+  {% for p in products %}
+  <div class="product-card">
+    {% if p.image_url %}
+    <img src="{{ p.image_url }}" alt="{{ p.title }}" class="product-img" />
+    {% else %}
+    <div class="product-img-placeholder">📦</div>
+    {% endif %}
+    <div class="product-info">
+      <span class="product-category">{{ p.category or 'Other' }}</span>
+      <h4><a href="{{ url_for('products.product_detail', product_id=p.product_id) }}">{{ p.title }}</a></h4>
+      <p class="product-desc">{{ (p.description or '')[:80] }}{% if p.description and p.description|length > 80 %}…{% endif %}</p>
+      <div class="product-footer">
+        <strong class="price">₹{{ "%.2f"|format(p.price) }}</strong>
+        <span class="condition-badge condition-{{ p.condition|lower if p.condition else 'other' }}">{{ p.condition or '—' }}</span>
+      </div>
+      <div class="product-seller">
+        by <a href="{{ url_for('main.profile', member_id=p.seller_id) }}">{{ p.seller.name }}</a>
+        &middot; {{ p.created_at.strftime('%d %b') }}
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+  <p>No products found matching your filters.</p>
+  <a href="{{ url_for('products.marketplace') }}" class="btn btn-outline">Clear filters</a>
+</div>
+{% endif %}
+{% endblock %}

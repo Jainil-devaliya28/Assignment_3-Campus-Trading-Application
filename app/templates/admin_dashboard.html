@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Admin Panel — CampusTrade{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>🛡️ Admin Panel</h2>
+  <span class="role-badge role-admin">ADMIN</span>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <span class="stat-number">{{ total_members }}</span>
+    <span class="stat-label">Total Members</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-number">{{ total_products }}</span>
+    <span class="stat-label">Total Products</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-number">{{ total_txns }}</span>
+    <span class="stat-label">Transactions</span>
+  </div>
+  <div class="stat-card">
+    <span class="stat-number">{{ total_feedbacks }}</span>
+    <span class="stat-label">Feedbacks</span>
+  </div>
+</div>
+
+<div class="quick-links">
+  <a href="{{ url_for('admin.logs') }}" class="quick-card">📋 View All Logs</a>
+  <a href="{{ url_for('admin.members') }}" class="quick-card">👥 Manage Members</a>
+  <a href="{{ url_for('admin.all_products') }}" class="quick-card">🛒 Manage Products</a>
+  <a href="{{ url_for('bench.benchmark_dashboard') }}" class="quick-card">⚡ SQL Benchmark</a>
+  <a href="{{ url_for('admin.feedbacks') }}" class="quick-card">📝 View Feedbacks</a>
+</div>
+
+<div class="section">
+  <h3>Recent Activity (Last 10 logs)</h3>
+  <table class="table">
+    <thead>
+      <tr><th>Time</th><th>User</th><th>Action</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+      {% for log in recent_logs %}
+      <tr>
+        <td>{{ log.timestamp.strftime('%d %b %H:%M') }}</td>
+        <td>{% if log.member %}{{ log.member.name }}{% else %}—{% endif %}</td>
+        <td><span class="badge badge-{{ 'blue' if log.action_type == 'INSERT' else ('yellow' if log.action_type == 'UPDATE' else ('red' if log.action_type == 'DELETE' else 'green')) }}">{{ log.action_type }}</span></td>
+        <td>{{ log.description }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

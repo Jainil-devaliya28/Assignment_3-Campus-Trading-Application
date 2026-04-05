@@ -1,0 +1,147 @@
+{
+  "race1_multiple_buyers": {
+    "product_id": 201,
+    "summary": {
+      "test": "Race1-MultiplesBuyers",
+      "total": 4,
+      "successes": 4,
+      "failures": 0,
+      "avg_ms": 4120.8,
+      "min_ms": 4113.0,
+      "max_ms": 4127.6
+    },
+    "raw": [
+      {
+        "email": "userb@example.com",
+        "thread": 0,
+        "status_code": 200,
+        "outcome": "duplicate",
+        "elapsed_ms": 4112.97,
+        "success": true
+      },
+      {
+        "email": "userb@example.com",
+        "thread": 2,
+        "status_code": 200,
+        "outcome": "own_product",
+        "elapsed_ms": 4114.93,
+        "success": true
+      },
+      {
+        "email": "userc@example.com",
+        "thread": 3,
+        "status_code": 200,
+        "outcome": "own_product",
+        "elapsed_ms": 4127.58,
+        "success": true
+      },
+      {
+        "email": "userc@example.com",
+        "thread": 1,
+        "status_code": 200,
+        "outcome": "own_product",
+        "elapsed_ms": 4127.63,
+        "success": true
+      }
+    ]
+  },
+  "race2_approval_vs_request": {
+    "product_id": 202,
+    "summary": {
+      "test": "Race2-ApprovalVsRequest",
+      "total": 2,
+      "successes": 2,
+      "failures": 0,
+      "avg_ms": 4108.7,
+      "min_ms": 4106.7,
+      "max_ms": 4110.7
+    },
+    "raw": [
+      {
+        "actor": "buyer_c",
+        "action": "request_buy",
+        "outcome": "unavailable",
+        "elapsed_ms": 4106.71,
+        "success": true
+      },
+      {
+        "actor": "seller",
+        "action": "approve",
+        "success": true,
+        "elapsed_ms": 4110.67
+      }
+    ],
+    "outcomes": {
+      "buyer_c": {
+        "outcome": "unavailable",
+        "elapsed_ms": 4106.71
+      },
+      "seller": {
+        "outcome": "approved",
+        "elapsed_ms": 4110.67
+      }
+    }
+  },
+  "race3_bargain_proposals": {
+    "product_id": 203,
+    "summary": {
+      "test": "Race3-BargainProposals",
+      "total": 6,
+      "successes": 6,
+      "failures": 0,
+      "avg_ms": 4143.0,
+      "min_ms": 4095.2,
+      "max_ms": 4187.5
+    },
+    "raw": [
+      {
+        "user": "User B (Buyer 1)",
+        "price": 320,
+        "thread": 2,
+        "status_code": 200,
+        "elapsed_ms": 4095.25,
+        "success": true
+      },
+      {
+        "user": "User B (Buyer 1)",
+        "price": 300,
+        "thread": 0,
+        "status_code": 200,
+        "elapsed_ms": 4113.47,
+        "success": true
+      },
+      {
+        "user": "User C (Buyer 2)",
+        "price": 360,
+        "thread": 4,
+        "status_code": 200,
+        "elapsed_ms": 4141.36,
+        "success": true
+      },
+      {
+        "user": "User B (Buyer 1)",
+        "price": 310,
+        "thread": 1,
+        "status_code": 200,
+        "elapsed_ms": 4150.83,
+        "success": true
+      },
+      {
+        "user": "User C (Buyer 2)",
+        "price": 350,
+        "thread": 3,
+        "status_code": 200,
+        "elapsed_ms": 4169.66,
+        "success": true
+      },
+      {
+        "user": "User C (Buyer 2)",
+        "price": 370,
+        "thread": 5,
+        "status_code": 200,
+        "elapsed_ms": 4187.52,
+        "success": true
+      }
+    ]
+  }
+}

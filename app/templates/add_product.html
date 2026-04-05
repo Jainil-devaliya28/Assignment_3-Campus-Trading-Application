@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}{% if edit %}Edit{% else %}Add{% endif %} Product — CampusTrade{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h2>{% if edit %}Edit Product{% else %}List a Product{% endif %}</h2>
+  <a href="{{ url_for('products.marketplace') }}" class="btn btn-outline">← Back</a>
+</div>
+
+<div class="form-card">
+  <form method="POST"
+        action="{% if edit %}{{ url_for('products.edit_product', product_id=product.product_id) }}{% else %}{{ url_for('products.add_product') }}{% endif %}"
+        enctype="multipart/form-data"
+        novalidate>
+
+    <div class="form-group">
+      <label for="title">Product Title *</label>
+      <input type="text" id="title" name="title"
+             placeholder="e.g. Engineering Mathematics Vol. 2"
+             value="{{ product.title if product else '' }}" required />
+    </div>
+
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea id="description" name="description" rows="4"
+                placeholder="Describe your product…">{{ product.description if product else '' }}</textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label for="price">Price (₹) *</label>
+        <input type="number" id="price" name="price" step="0.01" min="0"
+               placeholder="0.00" value="{{ product.price if product else '' }}" required />
+      </div>
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category" name="category">
+          <option value="">Select category</option>
+          {% for c in categories %}
+          <option value="{{ c }}" {% if product and product.category == c %}selected{% endif %}>{{ c }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="condition">Condition</label>
+        <select id="condition" name="condition">
+          <option value="">Select condition</option>
+          {% for c in conditions %}
+          <option value="{{ c }}" {% if product and product.condition == c %}selected{% endif %}>{{ c }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <!-- Image Upload -->
+    <div class="form-group">
+      <label for="image_file">Product Image</label>
+
+      {% if edit and product and product.image_url %}
+      <div class="current-image-preview">
+        <img src="{{ product.image_url }}" alt="Current image" class="preview-thumb" />
+        <span class="empty-text">Current image — upload a new one to replace it</span>
+      </div>
+      {% endif %}
+
+      <div class="upload-area" id="uploadArea">
+        <input type="file" id="image_file" name="image_file"
+               accept=".png,.jpg,.jpeg,.gif,.webp"
+               onchange="previewImage(this)" />
+        <div class="upload-placeholder" id="uploadPlaceholder">
+          <span class="upload-icon">📷</span>
+          <span>Click to upload or drag &amp; drop</span>
+          <small>PNG, JPG, GIF, WEBP — max 5 MB</small>
+        </div>
+        <img id="imagePreview" class="preview-thumb" style="display:none;" alt="Preview" />
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">{% if edit %}Save Changes{% else %}List Product{% endif %}</button>
+      <a href="{{ url_for('products.marketplace') }}" class="btn btn-outline">Cancel</a>
+    </div>
+  </form>
+</div>
+
+<script>
+function previewImage(input) {
+  const preview     = document.getElementById('imagePreview');
+  const placeholder = document.getElementById('uploadPlaceholder');
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      preview.src = e.target.result;
+      preview.style.display = 'block';
+      placeholder.style.display = 'none';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+// Drag and drop support
+const area = document.getElementById('uploadArea');
+area.addEventListener('dragover', e => { e.preventDefault(); area.classList.add('drag-over'); });
+area.addEventListener('dragleave', () => area.classList.remove('drag-over'));
+area.addEventListener('drop', e => {
+  e.preventDefault();
+  area.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file) {
+    const input = document.getElementById('image_file');
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    input.files = dt.files;
+    previewImage(input);
+  }
+});
+</script>
+{% endblock %}
