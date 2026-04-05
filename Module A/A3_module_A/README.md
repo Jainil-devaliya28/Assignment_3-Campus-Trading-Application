@@ -296,38 +296,4 @@ This is expected for large datasets. Reduce `data_sizes` in benchmarks for faste
 data_sizes = [100, 500, 1000]  # Instead of [500, 1000, 2000, 5000, 10000]
 ```
 
-## Future Enhancements
 
-1. **Persistence**: Serialize/deserialize B+ Tree to disk
-2. **Concurrency**: Multi-threaded access with locks
-3. **Optimization**: Lazy deletion, bulk loading algorithms
-4. **Variants**: B* Trees (higher occupancy), B-link Trees
-5. **SQL Interface**: Query language for database operations
-6. **Compression**: Key and value compression techniques
-
-## References
-
-- Bayer & McCreight (1972): "Organization and Maintenance of Large Ordered Indices"
-- Knuth (1998): "The Art of Computer Programming, Volume 3"
-- Modern Database Systems textbooks
-
-## Course Information
-
-- **Course**: CS 432 - Databases (Course Project/Assignment 2)
-- **Instructor**: Dr. Yogesh K. Meena
-- **Institution**: Indian Institute of Technology, Gandhinagar
-- **Date**: March 2026
-- **Module**: A - Lightweight DBMS with B+ Tree Index
-
-## Author Notes
-
-This implementation prioritizes **clarity and correctness** over performance micro-optimizations. It serves as an educational tool demonstrating:
-- How modern databases implement indexing
-- Self-balancing tree concepts
-- Time complexity analysis in practice
-- Performance benchmarking methodology
-
----
-
-**Status**: ✅ Complete and fully functional
-**Last Updated**: March 21, 2026
