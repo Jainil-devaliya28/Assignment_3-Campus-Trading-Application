@@ -84,6 +84,6 @@ python app.py
 
 ---
 
-## 🏁 Conclusion
+##  Conclusion
 
 This project successfully implements a **robust transaction engine** ensuring ACID properties and reliable crash recovery.
