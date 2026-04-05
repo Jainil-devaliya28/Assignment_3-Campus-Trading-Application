@@ -105,9 +105,14 @@ cd final_app
 
 # 2. Create and activate a virtual environment
 python -m venv venv
+<<<<<<< HEAD
 venv\Scripts\activate         # Windows
 # source venv/bin/activate        # Linux/macOS
 
+=======
+source venv/bin/activate        # Linux/macOS
+# venv\Scripts\activate         # Windows
+>>>>>>> 111dedb (Update README)
 
 # 3. Install dependencies
 pip install -r requirements.txt
