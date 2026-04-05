@@ -1,13 +1,13 @@
-# 📦 Assignment 3 – Module A  
+#  Assignment 3 – Module A  
 ## Transaction Management & Crash Recovery Engine
 
-### 👨‍💻 Course
+###  Course
 CS 432 – Databases  
 Indian Institute of Technology Gandhinagar  
 
 ---
 
-## 📌 Overview
+##  Overview
 
 This project implements **Module A of Assignment 3**, focusing on building a reliable database engine with proper transaction handling and crash recovery.
 
@@ -19,9 +19,9 @@ The system ensures correctness of operations by implementing core **ACID propert
 
 ---
 
-## ⚙️ Features Implemented
+##  Features Implemented
 
-### 🔁 1. Transaction Management
+### 1. Transaction Management
 - Each operation is executed as a **transaction**
 - Supports:
   - BEGIN transaction
@@ -31,7 +31,7 @@ The system ensures correctness of operations by implementing core **ACID propert
 
 ---
 
-### 🧾 2. Write-Ahead Logging (WAL)
+###  2. Write-Ahead Logging (WAL)
 
 - All operations are logged **before execution**
 - Log entries include:
@@ -46,7 +46,7 @@ This ensures:
 
 ---
 
-### 💥 3. Crash Recovery Mechanism
+###  3. Crash Recovery Mechanism
 
 On system restart, recovery is performed using logs:
 
@@ -58,7 +58,7 @@ On system restart, recovery is performed using logs:
 
 ---
 
-### 🌳 4. B+ Tree Indexing
+###  4. B+ Tree Indexing
 
 - All records are indexed using a **B+ Tree**
 - Every operation updates:
@@ -67,14 +67,14 @@ On system restart, recovery is performed using logs:
 
 ---
 
-### 🔄 5. Database Consistency
+###  5. Database Consistency
 
 The system guarantees:
 - Database and B+ Tree are always consistent  
 
 ---
 
-## ▶️ How to Run
+##  How to Run
 
 ```bash
 pip install -r requirements.txt
