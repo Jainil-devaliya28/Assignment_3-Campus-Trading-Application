@@ -1,7 +1,7 @@
 # Module B — High-Concurrency API Load Testing & Failure Simulation
 
-> **CS 432 Databases — Assignment 3 | IIT Gandhinagar**
-> Campus Trading Platform (Flask + MySQL)
+> **CS 432 Databases — Assignment 3**
+> Campus Trading Application 
 
 ---
 
@@ -105,8 +105,9 @@ cd final_app
 
 # 2. Create and activate a virtual environment
 python -m venv venv
-source venv/bin/activate        # Linux/macOS
-# venv\Scripts\activate         # Windows
+venv\Scripts\activate         # Windows
+# source venv/bin/activate        # Linux/macOS
+
 
 # 3. Install dependencies
 pip install -r requirements.txt
