@@ -1,0 +1,76 @@
+import os
+import unittest
+from db_test_utils import _banner, _section, _step, _result, _ok, _wal_snapshot, _table_snapshot, WAL_PATH
+from database.db_manager import DatabaseManager
+
+class TestDurability(unittest.TestCase):
+
+    def test_committed_data_survives_restart(self):
+        _banner("DURABILITY  ·  committed data survives restart")
+        if os.path.exists(WAL_PATH):
+            os.remove(WAL_PATH)
+        _section("Session 1 – insert and commit two records")
+        db1 = DatabaseManager("durdb", log_path=WAL_PATH, auto_recover=False)
+        db1.create_table("products", "id", order=4)
+        _step("INSERT key=100 ('Widget') → WAL: BEGIN, INSERT, COMMIT + fsync.")
+        db1.insert_record("products", 100, {"id": 100, "name": "Widget", "price": 9.99})
+        _step("INSERT key=101 ('Gadget') → WAL: BEGIN, INSERT, COMMIT + fsync.")
+        db1.insert_record("products", 101, {"id": 101, "name": "Gadget", "price": 19.99})
+        _step(f"WAL now has {len(db1._wal.get_records())} records (all durable on disk).")
+        _wal_snapshot(db1)
+        _step("Simulating shutdown: deleting the in-memory DatabaseManager object.")
+        del db1
+        _section("Session 2 – cold restart, no in-memory state")
+        _step("Opening a brand-new DatabaseManager with auto_recover=True.")
+        _step("create_table() triggers recovery: REDO replays INSERT(100) and INSERT(101).")
+        db2 = DatabaseManager("durdb", log_path=WAL_PATH, auto_recover=True)
+        db2.create_table("products", "id", order=4)
+        _section("Verification")
+        r100 = db2.get_table("products").search(100)
+        r101 = db2.get_table("products").search(101)
+        _result("key=100 recovered", r100)
+        _result("key=101 recovered", r101)
+        _result("r100['name']", r100["name"] if r100 else "—")
+        _result("r101['name']", r101["name"] if r101 else "—")
+        _table_snapshot(db2, "products")
+        self.assertIsNotNone(r100, "Record 100 should survive restart")
+        self.assertIsNotNone(r101, "Record 101 should survive restart")
+        self.assertEqual(r100["name"], "Widget")
+        self.assertEqual(r101["name"], "Gadget")
+        _ok("Both committed records survived the simulated restart via WAL REDO.")
+
+    def test_uncommitted_data_not_present_after_restart(self):
+        _banner("DURABILITY  ·  uncommitted data absent after restart")
+        if os.path.exists(WAL_PATH):
+            os.remove(WAL_PATH)
+        _section("Session 1 – one committed record + one partial (crashed) transaction")
+        db1 = DatabaseManager("durdb2", log_path=WAL_PATH, auto_recover=False)
+        db1.create_table("orders", "id", order=4)
+        _step("INSERT key=1 ('Book') → committed. WAL: BEGIN, INSERT, COMMIT.")
+        db1.insert_record("orders", 1, {"id": 1, "item": "Book"})
+        _step("Begin txn for key=2 ('Pen') → WAL: BEGIN, INSERT.  No COMMIT written.")
+        txn = db1.begin_transaction()
+        db1.get_table("orders").transactional_insert(txn, 2, {"id": 2, "item": "Pen"})
+        _step("*** CRASH — process dies here.  COMMIT never written. ***")
+        _wal_snapshot(db1)
+        del db1
+        _section("Session 2 – restart and recover")
+        _step("Recovery analysis:")
+        _step("  txn for key=1 has COMMIT  → 'committed' set → REDO.")
+        _step("  txn for key=2 has no COMMIT → 'incomplete' set → UNDO.")
+        _step("Redo : _raw_insert(1, {'item':'Book'}).")
+        _step("Undo : _raw_delete(2)  — removes the ghost row for 'Pen'.")
+        db2 = DatabaseManager("durdb2", log_path=WAL_PATH, auto_recover=True)
+        db2.create_table("orders", "id", order=4)
+        _section("Verification")
+        r1 = db2.get_table("orders").search(1)
+        r2 = db2.get_table("orders").search(2)
+        _result("key=1 (Book) present after restart", r1 is not None, good=(r1 is not None))
+        _result("key=2 (Pen)  present after restart", r2 is not None, good=(r2 is None))
+        _table_snapshot(db2, "orders")
+        self.assertIsNotNone(r1, "Committed record should exist after recovery")
+        self.assertIsNone(r2,    "Uncommitted record must not appear after recovery")
+        _ok("REDO restored the committed record; UNDO erased the partial one.")
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)
